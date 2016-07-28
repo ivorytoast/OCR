@@ -41,16 +41,10 @@ public class OCR {
 		MBFImage clone = image.clone();
 		
 		 //Step 3
-		 //Fill in all arrays - you are now able to process clone
 		OCR processor = new OCR(clone);
 
 		 //Step 4
-		 //Main logic of the processor
-		
-		//processor.analyzeWhiteSegments(clone);
-		//DisplayUtilities.display(clone);
-		//processor.reduceNoise(clone, 100, 110); //Makes the boxes
-		//processor.performSegmentation(clone, 100, 110, processor.values); //Gets rid of unnecessary boxes
+		 //Main logic of the OCR
 		processor.convertToGrayScale(clone);
 		processor.findTopCorner(processor.grayScalePixels);
 		processor.findBottomCorner(processor.grayScalePixels);
@@ -66,7 +60,6 @@ public class OCR {
 		MBFImage segment = clone.extractROI(bounds);
 		DisplayUtilities.display(segment);
 		processor.performOCR(segment, processor.grayScalePixels);
-		//clone.drawShape(new Rectangle(left_most, top_most, width, height), RGBColour.CYAN);
 		 
 		//Step 5
 		 //Display the image
@@ -208,196 +201,6 @@ public class OCR {
 			
 		}
 	}
-	
-	/*
-	public void reduceNoise(MBFImage clone, int tileWidth, int tileHeight) {
-		int x = 0;
-		int y = 0;
-		int width = tileWidth;
-		int height = tileHeight;
-		int counter = 0;
-		for (int yPos = 0; yPos <= (clone.getHeight() / height); yPos++) {
-			width = tileWidth;
-			height = tileHeight;
-			for (int xPos = 0; xPos <= (clone.getWidth() / width); xPos++) {
-				Rectangle bounds = new Rectangle(x, y, getWidth(width, clone, x), getHeight(height, clone, y));
-				MBFImage segment = clone.extractROI(bounds);
-				//clone.drawShape(bounds, 1, RGBColour.ORANGE);
-				segments[counter] = segment;
-				if (analyzeWhiteSegments(segments[counter]) > 1) {
-					comparators[counter] = true;
-				}
-				counter++;
-				x += width;
-			}
-			y += height;
-			x = 0;
-		}
-	}
-	
-	public void performSegmentation(MBFImage clone, int tileWidth, int tileHeight, int[] values) {
-		values[0] = 0;
-		values[1] = 0;
-		int personCounter = 0;
-		int x = 0;
-		int y = 0;
-		int width = tileWidth;
-		int height = tileHeight;
-		int counter = 0;
-		//double doubleWidth = (double) tileWidth;
-		//double totalTiles = (double) (clone.getWidth() / doubleWidth);
-		//int totalTilesDone = ((int) Math.ceil(totalTiles));
-		for (int yPos = 0; yPos <= (clone.getHeight() / height); yPos++) {
-			width = tileWidth;
-			height = tileHeight;
-			for (int xPos = 0; xPos <= (clone.getWidth() / width); xPos++) {
-				Rectangle bounds = new Rectangle(x, y, getWidth(width, clone, x), getHeight(height, clone, y));
-				MBFImage segment = clone.extractROI(bounds);
-				segments[counter] = segment;
-				if (analyzeWhiteSegments(segments[counter]) > 100 && analyzeBlackSegments(segments[counter]) > 20) {
-					if (counter > 0) {
-						if (determineIfSamePerson(values[0], values[1], xPos, yPos) == false) {
-							personCounter++;
-						} else {
-							//continue -- same person
-							System.out.println("Same Person");
-						}
-					} else {
-						//values[0] = xPos;
-						//values[1] = yPos;
-						//determineIfSamePerson(values[0], values[1], xPos, yPos);
-						//personCounter++;
-					}
-					if (personCounter == 1) {
-						clone.drawShape(bounds, 1, RGBColour.RED);
-					} else if (personCounter == 2) {
-						clone.drawShape(bounds, 1, RGBColour.GREEN);
-					} else if (personCounter == 3) {
-						clone.drawShape(bounds, 1, RGBColour.BLUE);
-					} else if (personCounter == 4) {
-						clone.drawShape(bounds, 1, RGBColour.ORANGE);
-					} else if (personCounter == 5) {
-						clone.drawShape(bounds, 1, RGBColour.PINK);
-					} else if (personCounter == 6) {
-						clone.drawShape(bounds, 1, RGBColour.GRAY);
-					} else if (personCounter == 7) {
-						clone.drawShape(bounds, 1, RGBColour.CYAN);
-					} else {
-						clone.drawShape(bounds, 1, RGBColour.MAGENTA);
-					}
-					System.out.println("Person " + personCounter + " positioned at (" + xPos + ", " + yPos + ")");
-					values[0] = xPos;
-					values[1] = yPos;
-					/*
-					//if (comparators[counter + 1] == false //Next
-							//&& comparators[counter - 1] == false) //Before
-								//&& comparators[counter - totalTilesDone] == false //Above
-									//&& comparators[counter + totalTilesDone] == false) //Below
-					{
-						//continue
-					} else {
-						clone.drawShape(bounds, 1, RGBColour.RED);
-					}
-					*/
-	/*
-				}
-				counter++;
-				x += width;
-			}
-			y += height;
-			x = 0;
-		}
-	}
-	
-	public boolean determineIfSamePerson(int x1, int y1, int x2, int y2) {
-		boolean isSamePerson = true;
-		int xDifference = Math.abs(x2 - x1);
-		int yDifference = Math.abs(y2 - y1);
-		int totalDifference = xDifference - yDifference;
-		//System.out.println(x1);
-		//System.out.println(y1);
-		//System.out.println("X DIFF: " + xDifference + " || Y DIFF: " + yDifference);
-		//System.out.println("XDifference: " + xDifference);
-		//System.out.println("YDifference: " + yDifference);
-		//System.out.println("TOTALDifference: " + totalDifference);
-		if (xDifference > 1 || yDifference > 1 || totalDifference > 1) {
-			isSamePerson = false;
-		} else {
-			isSamePerson = true;
-		}
-		return isSamePerson;
-	}
-	
-	public void performWhiteOut(MBFImage image, float[][] whiteOut) {
-		for (int y=1; y<image.getHeight() - 1; y++) {
-		    for(int x=1; x<image.getWidth() - 1; x++) {
-		    	whiteOut[y][x] = 1;
-		    } 
-		}
-	}
-
-	public int analyzeWhiteSegments(MBFImage image) {
-		int counter = 0;
-		int y = 1;
-		int x = 1;
-		for (y=1; y<image.getHeight() - 1; y++) {
-		    for(x=1; x<image.getWidth() - 1; x++) {
-		    	float sumFloat = 0;
-		        float redColor = image.getBand(0).pixels[y][x];
-		        float greenColor = image.getBand(1).pixels[y][x];
-		        float blueColor = image.getBand(2).pixels[y][x];
-		        sumFloat = (((redColor*256) + (greenColor*256) + (blueColor*256)) / 3);
-		        if (sumFloat/256 < 0.98) {
-		        	sumFloat = 1;
-		        } else {
-		        	sumFloat = sumFloat / 256;
-		        	counter++;
-		        }
-		        grayScalePixels[y][x] = sumFloat;
-		    } 
-		}
-		
-		if (counter > 10) {
-			colorInImage(image, grayScalePixels);
-		} else {
-			colorInImage(image, whiteOut);
-		}
-		
-		//if (counter != 0)
-			//System.out.println("White Pixels Found: " + counter);
-		return counter;
-	}
-	
-	public int analyzeBlackSegments(MBFImage image) {
-		int counter = 0;
-		int y = 1;
-		int x = 1;
-		for (y=1; y<image.getHeight() - 1; y++) {
-		    for(x=1; x<image.getWidth() - 1; x++) {
-		    	float sumFloat = 0;
-		        float redColor = image.getBand(0).pixels[y][x];
-		        float greenColor = image.getBand(1).pixels[y][x];
-		        float blueColor = image.getBand(2).pixels[y][x];
-		        sumFloat = (((redColor*256) + (greenColor*256) + (blueColor*256)) / 3);
-		        if (sumFloat/256 > 0.99) {
-		        	sumFloat = 1;
-		        } else {
-		        	sumFloat = sumFloat / 256;
-		        	counter++;
-		        }
-		        grayScalePixels[y][x] = sumFloat;
-		    } 
-		}
-		
-		if (counter > 10) {
-			colorInImage(image, grayScalePixels);
-		} else {
-			colorInImage(image, whiteOut);
-		}
-		
-		//System.out.println("Black Pixels Found: " + counter);
-		return counter;
-	}*/
 	
 	public static void colorInImage(MBFImage image, float[][] pixels) {
 		for (int y=1; y<image.getHeight() - 1; y++) {
