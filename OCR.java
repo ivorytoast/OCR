@@ -66,6 +66,7 @@ public class OCR {
 		System.out.println("Right: " + processor.determineAverage(segment, segment.getWidth()/2));
 		DisplayUtilities.display(segment);
 		processor.performOCR(segment, processor.grayScalePixels);
+		System.out.println("A Averages: " + processor.findAverages(segment));
 		 
 		//Step 5
 		 //Display the image
