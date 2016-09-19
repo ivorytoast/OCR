@@ -69,6 +69,20 @@ public class OCR {
 	
 	//-----------------------------------------Methods----------------------------------------------------------//
 	
+	public float determineAverage(MBFImage image, int x) {
+		float counter = 0;
+		float average = 0;
+		for (int y=0; y<image.getHeight(); y++) {
+			float redColor = image.getBand(0).pixels[y][x];
+	        float greenColor = image.getBand(1).pixels[y][x];
+	        float blueColor = image.getBand(2).pixels[y][x];
+	        float sumFloat = (((redColor*256) + (greenColor*256) + (blueColor*256)) / 3);
+	        average += sumFloat;
+	        counter++;
+		}
+		return average / counter;
+	}
+	
 	public void convertToGrayScale(MBFImage image) {
 		for (int y=0; y<image.getHeight(); y++) {
 		    for(int x=0; x<image.getWidth(); x++) {
