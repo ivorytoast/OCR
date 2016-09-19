@@ -69,6 +69,28 @@ public class OCR {
 	
 	//-----------------------------------------Methods----------------------------------------------------------//
 	
+	public StringBuilder findAverages(MBFImage image) {
+		StringBuilder string = new StringBuilder();
+		int startLoop = image.getWidth() / 4;
+		int endLoop = image.getWidth() - startLoop;
+		for (int x = startLoop; x <= endLoop; x++) {
+			float counter = 0;
+			float average = 0;
+			if (x != startLoop)
+				string.append(",");
+			for (int y = 0; y < image.getHeight(); y++) {
+					float redColor = image.getBand(0).pixels[y][x];
+			        float greenColor = image.getBand(1).pixels[y][x];
+			        float blueColor = image.getBand(2).pixels[y][x];
+			        float sumFloat = (((redColor*256) + (greenColor*256) + (blueColor*256)) / 3);
+			        average += sumFloat;
+			        counter++;
+			}
+			string.append(Integer.toString((int)(average/counter)));
+		}
+		return string;
+	}
+	
 	public float determineAverage(MBFImage image, int x) {
 		float counter = 0;
 		float average = 0;
