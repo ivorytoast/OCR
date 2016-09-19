@@ -58,6 +58,12 @@ public class OCR {
 		int width = right_most - left_most;
 		Rectangle bounds = new Rectangle(left_most, top_most, width, height);
 		MBFImage segment = clone.extractROI(bounds);
+		segment.drawShape(new Rectangle(segment.getWidth()/2-2,0,0,segment.getHeight()), RGBColour.BLUE);
+		segment.drawShape(new Rectangle(segment.getWidth()/2-1,0,0,segment.getHeight()), RGBColour.ORANGE);
+		segment.drawShape(new Rectangle(segment.getWidth()/2,0,0,segment.getHeight()), RGBColour.RED);
+		System.out.println("Left: " + processor.determineAverage(segment, segment.getWidth()/2-2));
+		System.out.println("Middle: " + processor.determineAverage(segment, segment.getWidth()/2-1));
+		System.out.println("Right: " + processor.determineAverage(segment, segment.getWidth()/2));
 		DisplayUtilities.display(segment);
 		processor.performOCR(segment, processor.grayScalePixels);
 		 
