@@ -34,17 +34,23 @@ public class OCR {
 	public static void main(String[] args) throws IOException {
 		 //Step 1
 		 //Read in the image using 'OpenImaj'
-		MBFImage image = ImageUtilities.readMBF(new File("/Users/Anthony/Desktop/Letters/small.png"));
+		MBFImage image = ImageUtilities.readMBF(new File("/Users/Anthony/Desktop/Main/Sort/Letters/small.png"));
 		
 		 //Step 2
 		 //Create a clone
 		MBFImage clone = image.clone();
 		
 		 //Step 3
+		 //Fill in all arrays - you are now able to process clone
 		OCR processor = new OCR(clone);
 
 		 //Step 4
-		 //Main logic of the OCR
+		 //Main logic of the processor
+		
+		//processor.analyzeWhiteSegments(clone);
+		//DisplayUtilities.display(clone);
+		//processor.reduceNoise(clone, 100, 110); //Makes the boxes
+		//processor.performSegmentation(clone, 100, 110, processor.values); //Gets rid of unnecessary boxes
 		processor.convertToGrayScale(clone);
 		processor.findTopCorner(processor.grayScalePixels);
 		processor.findBottomCorner(processor.grayScalePixels);
@@ -65,9 +71,13 @@ public class OCR {
 		System.out.println("Middle: " + processor.determineAverage(segment, segment.getWidth()/2-1));
 		System.out.println("Right: " + processor.determineAverage(segment, segment.getWidth()/2));
 		DisplayUtilities.display(segment);
-		processor.performOCR(segment, processor.grayScalePixels);
+		//processor.performOCR(segment, processor.grayScalePixels);
+		clone.drawShape(new Rectangle(left_most, top_most, width, height), 1, RGBColour.RED);
+		System.out.println("Width: " + segment.getWidth());
+		System.out.println("YOSKI: " + segment.getWidth()/2);
 		System.out.println("A Averages: " + processor.findAverages(segment));
-		 
+		System.out.println("A Averages: " + processor.findAveragesFromMiddle(segment));
+		System.out.println("Height: " +segment.getHeight());
 		//Step 5
 		 //Display the image
 		DisplayUtilities.display(clone);
@@ -96,6 +106,54 @@ public class OCR {
 			string.append(Integer.toString((int)(average/counter)));
 		}
 		return string;
+	}
+	
+	public StringBuilder findAveragesFromMiddle(MBFImage image) {
+		StringBuilder string = new StringBuilder();
+		int counter = 0;
+		int denominator = 0;
+		double average = 0;
+		boolean add = false;
+		//int zeroCounter = 0;
+		//int zeroDenominator = 0;
+		//int zeroDifference = 0;
+		while (counter < 10) {
+			int x = image.getWidth() / 2 - 1;
+			if (add) {
+				counter++;
+				x = Math.abs(counter + x);
+			} else {
+				x = Math.abs(counter - x);
+			}
+			if (counter != 0)
+				string.append(",");
+			denominator = 0;
+			average = 0;
+			//zeroCounter = 0;
+			//zeroDenominator = 0;
+			for (int y = 0; y < image.getHeight(); y++) {
+				float redColor = image.getBand(0).pixels[y][x];
+		        float greenColor = image.getBand(1).pixels[y][x];
+		        float blueColor = image.getBand(2).pixels[y][x];
+		        float sumFloat = (((redColor*256) + (greenColor*256) + (blueColor*256)) / 3);
+		        //if (sumFloat == 0)
+		        	//zeroCounter++;
+		        average += sumFloat;
+		        denominator++;
+		        //if (zeroCounter > 10)
+		        	//zeroDifference = zeroCounter - 50;
+		        //zeroDenominator = denominator - zeroDifference;
+			}
+			if (add) {
+				add = false;
+			} else {
+				add = true;
+			}
+			//System.out.println(zeroCounter);
+			string.append(Integer.toString((int)(average/denominator)));
+		}
+		return string;
+		
 	}
 	
 	public float determineAverage(MBFImage image, int x) {
@@ -239,9 +297,7 @@ public class OCR {
 	}
 	
 	public void returnLetter(MBFImage image, int[] inputPixels, int[] letterPixels) {
-		int difference = 0;
-		for(int i = 0; i < inputPixels.length; i++) {
-			
+		for (int y = 0; y<image.getHeight(); y++) {
 		}
 	}
 	
