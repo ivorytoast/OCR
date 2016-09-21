@@ -132,9 +132,10 @@ public class OCR {
 			//zeroCounter = 0;
 			//zeroDenominator = 0;
 			for (int y = 0; y < image.getHeight(); y++) {
-				float redColor = image.getBand(0).pixels[y][x];
-		        float greenColor = image.getBand(1).pixels[y][x];
-		        float blueColor = image.getBand(2).pixels[y][x];
+				int weightedY = (int) ((y)*(image.getHeight()-y))/(image.getHeight());
+				float redColor = image.getBand(0).pixels[weightedY][x];
+		        float greenColor = image.getBand(1).pixels[weightedY][x];
+		        float blueColor = image.getBand(2).pixels[weightedY][x];
 		        float sumFloat = (((redColor*256) + (greenColor*256) + (blueColor*256)) / 3);
 		        //if (sumFloat == 0)
 		        	//zeroCounter++;
