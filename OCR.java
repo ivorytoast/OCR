@@ -46,11 +46,6 @@ public class OCR {
 
 		 //Step 4
 		 //Main logic of the processor
-		
-		//processor.analyzeWhiteSegments(clone);
-		//DisplayUtilities.display(clone);
-		//processor.reduceNoise(clone, 100, 110); //Makes the boxes
-		//processor.performSegmentation(clone, 100, 110, processor.values); //Gets rid of unnecessary boxes
 		processor.convertToGrayScale(clone);
 		processor.findTopCorner(processor.grayScalePixels);
 		processor.findBottomCorner(processor.grayScalePixels);
@@ -71,13 +66,12 @@ public class OCR {
 		System.out.println("Middle: " + processor.determineAverage(segment, segment.getWidth()/2-1));
 		System.out.println("Right: " + processor.determineAverage(segment, segment.getWidth()/2));
 		DisplayUtilities.display(segment);
-		//processor.performOCR(segment, processor.grayScalePixels);
 		clone.drawShape(new Rectangle(left_most, top_most, width, height), 1, RGBColour.RED);
 		System.out.println("Width: " + segment.getWidth());
-		System.out.println("YOSKI: " + segment.getWidth()/2);
 		System.out.println("A Averages: " + processor.findAverages(segment));
 		System.out.println("A Averages: " + processor.findAveragesFromMiddle(segment));
 		System.out.println("Height: " +segment.getHeight());
+		
 		//Step 5
 		 //Display the image
 		DisplayUtilities.display(clone);
@@ -114,9 +108,6 @@ public class OCR {
 		int denominator = 0;
 		double average = 0;
 		boolean add = false;
-		//int zeroCounter = 0;
-		//int zeroDenominator = 0;
-		//int zeroDifference = 0;
 		while (counter < 10) {
 			int x = image.getWidth() / 2 - 1;
 			if (add) {
@@ -129,28 +120,20 @@ public class OCR {
 				string.append(",");
 			denominator = 0;
 			average = 0;
-			//zeroCounter = 0;
-			//zeroDenominator = 0;
 			for (int y = 0; y < image.getHeight(); y++) {
 				int weightedY = (int) ((y)*(image.getHeight()-y))/(image.getHeight());
 				float redColor = image.getBand(0).pixels[weightedY][x];
 		        float greenColor = image.getBand(1).pixels[weightedY][x];
 		        float blueColor = image.getBand(2).pixels[weightedY][x];
 		        float sumFloat = (((redColor*256) + (greenColor*256) + (blueColor*256)) / 3);
-		        //if (sumFloat == 0)
-		        	//zeroCounter++;
 		        average += sumFloat;
 		        denominator++;
-		        //if (zeroCounter > 10)
-		        	//zeroDifference = zeroCounter - 50;
-		        //zeroDenominator = denominator - zeroDifference;
 			}
 			if (add) {
 				add = false;
 			} else {
 				add = true;
 			}
-			//System.out.println(zeroCounter);
 			string.append(Integer.toString((int)(average/denominator)));
 		}
 		return string;
@@ -216,29 +199,29 @@ public class OCR {
 	}
 	
 	public void findLeftCorner(float[][] pixels) {
-		for(int x = 0; x < pixels[0].length - 1; x++){
-            for (int y = pixels.length - 1; y >= 0; y--){
-                if (pixels[y][x] < 0.1) {
-                	xCords[2] = x;
-                	yCords[2] = y;
-                	System.out.println("Position of left pixel: (" + x + "," + y + ")");
-                	return;
-                }
-            }
-        }
+		for (int x = 0; x < pixels[0].length - 1; x++){
+            		for (int y = pixels.length - 1; y >= 0; y--){
+        			 if (pixels[y][x] < 0.1) {
+                			xCords[2] = x;
+                			yCords[2] = y;
+                			System.out.println("Position of left pixel: (" + x + "," + y + ")");
+                			return;
+                		}
+            		}
+		  }
 	}
 	
 	public void findRightCorner(float[][] pixels) {
-		for(int x = pixels[0].length - 1; x >= 0; x--){
-            for (int y = 0; y < pixels.length - 1; y++){
-                if (pixels[y][x] < 0.1) {
-                	xCords[3] = x;
-                	yCords[3] = y;
-                	System.out.println("Position of right pixel: (" + x + "," + y + ")");
-                	return;
-                }
-            }
-        }
+		for (int x = pixels[0].length - 1; x >= 0; x--){
+            		for (int y = 0; y < pixels.length - 1; y++){
+        			 if (pixels[y][x] < 0.1) {
+                			xCords[3] = x;
+                			yCords[3] = y;
+                			System.out.println("Position of right pixel: (" + x + "," + y + ")");
+                			return;
+                		}
+        		 }
+		 }
 	}
 	
 	public int determineLeftMostPoint(int[] cords) {
