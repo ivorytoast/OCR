@@ -102,6 +102,7 @@ public class OCR {
 		return string;
 	}
 	
+	/*
 	public StringBuilder findAveragesFromMiddle(MBFImage image) {
 		StringBuilder string = new StringBuilder();
 		int counter = 0;
@@ -135,6 +136,49 @@ public class OCR {
 				add = true;
 			}
 			string.append(Integer.toString((int)(average/denominator)));
+		}
+		return string;
+		
+	}
+	*/
+	
+	public StringBuilder findAveragesFromMiddle(MBFImage image) {
+		StringBuilder string = new StringBuilder();
+		int counter = 0;
+		double denominator = 0;
+		double average = 0;
+		boolean add = false;
+		while (counter < image.getWidth() / 2) {
+			System.out.println(counter);
+			int x = image.getWidth() / 2 - 1;
+			if (add) {
+				counter++;
+				x = Math.abs(counter + x);
+			} else {
+				x = Math.abs(counter - x);
+			}
+			if (counter != 0)
+				string.append(",");
+			denominator = 0;
+			average = 0;
+			for (int y = 0; y < image.getHeight(); y++) {
+				float redColor = image.getBand(0).pixels[y][x];
+		        float greenColor = image.getBand(1).pixels[y][x];
+		        float blueColor = image.getBand(2).pixels[y][x];
+		        float sumFloat = (((redColor*256) + (greenColor*256) + (blueColor*256)) / 3);
+		        if (sumFloat == 0.0)
+		        	average++;
+		        denominator++;
+		       // System.out.println("Average: " + average);
+			}
+			if (add) {
+				add = false;
+			} else {
+				add = true;
+			}
+			DecimalFormat df = new DecimalFormat("#.##");
+			String value = df.format(average/denominator);
+			string.append(value);
 		}
 		return string;
 		
