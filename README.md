@@ -1,10 +1,6 @@
 # OCR
 
-A project with two main steps:
-  1. Develop a sub-program that recieves input of a single black character with a white background and output a set of  distinguishing characteristics that identify that character.
-  2. Using that information from step 1, find characters in a picture, and determine the correct character. 
-  
-This project is not designed text encased in a complex background -- rather it is meant to provide an OCR for objects such as receipts and business cards. 
+A project that is currently just starting out but is starting to find some traction. Besides just implementing a few beginner methods to help with analzying images that are inputted, I have some working analysis that can determine whether or not it is a specific letter in very specific circumstances. My main method right now is to get it to work in a very controlled enviroment, which will allow me then to expand from a stable base point.  
 
-Goal:
-  Be able to give it a receipt -- figure out the total amount, and return the total. This can be then used however one wants. For example, they could store the total into a database to keep track of how much they have spent over a period of time. 
+As of right now, this program can do a couple major things:  
+  1. Given a white background and a black typed letter, it can pinpoint and retrieve the exact bounds of the letter. 
