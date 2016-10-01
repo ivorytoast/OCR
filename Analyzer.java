@@ -10,7 +10,6 @@ public class Analyzer {
 	public double[] CTest =  {0.17,0.17,0.17,0.17,0.17,0.17,0.24,0.17,0.24,0.17,0.28,0.21,0.31,0.28,0.38,0.31,0.62,0.34,0.66,0.45,0.52,0.41,0.28,0.28};
 	public int[] letterG =  {152,85,85,213,199,192,206,192,192,184,192,177,184,184,170,177,170,163,156,170};
 	public int[] letterH =  {152,85,85,226,226,226,226,226,226,226,226,226,226,226,226,226,219,226,0,226};
-	//public int[] letterI =  {}; Acting wierd
 	public int[] letterJ =  {52,85,85,241,234,241,226,234,219,234,175,226,182,212,190,0,212,7,190,14};
 	public int[] letterK =  {152,85,85,160,197,160,212,153,219,153,219,153,219,153,219,153,212,153,204,168};
 			
@@ -24,15 +23,6 @@ public class Analyzer {
 		System.out.println("C5: " + main.displayMean(main.C5) + " with a length of: " + main.C5.length);
 		System.out.println("CTest: " + main.displayMean(main.CTest) + " with a length of: " + main.CTest.length);
 		System.out.println("Difference: " + main.findDifference(main.findAverageSize(), main.CTest.length));
-		//System.out.println("Percent Error of Size: " + main.findPercentErrorOfSize(main.findAverageSize(), main.CTest.length));
-//		System.out.println("Small D: " + main.displayMean(main.letterD));
-//		System.out.println("Small E: " + main.displayMean(main.letterE));
-//		System.out.println("Small F: " + main.displayMean(main.letterF));
-//		System.out.println("Small G: " + main.displayMean(main.letterG));
-//		System.out.println("Small H: " + main.displayMean(main.letterH));
-//		System.out.println("Small J: " + main.displayMean(main.letterJ));
-//		System.out.println("Small K: " + main.displayMean(main.letterK));
-		
 	}
 	
 	public double displayMean(double[] array) {
@@ -50,7 +40,6 @@ public class Analyzer {
 		System.out.println("New Average: " + (displayMean(CTest) * findPercentErrorOfSize(averageSize, testSize)));
 		System.out.println("Average of all 5: " + average);
 		double output = difference / average * 100;
-		//double outputAdjusted = output * findPercentErrorOfSize(averageSize, testSize);
 		return df.format(Math.abs(output)) + "%";
 	}
 	
