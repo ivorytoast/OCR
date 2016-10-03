@@ -102,46 +102,6 @@ public class OCR {
 		return string;
 	}
 	
-	/*
-	public StringBuilder findAveragesFromMiddle(MBFImage image) {
-		StringBuilder string = new StringBuilder();
-		int counter = 0;
-		int denominator = 0;
-		double average = 0;
-		boolean add = false;
-		while (counter < 10) {
-			int x = image.getWidth() / 2 - 1;
-			if (add) {
-				counter++;
-				x = Math.abs(counter + x);
-			} else {
-				x = Math.abs(counter - x);
-			}
-			if (counter != 0)
-				string.append(",");
-			denominator = 0;
-			average = 0;
-			for (int y = 0; y < image.getHeight(); y++) {
-				int weightedY = (int) ((y)*(image.getHeight()-y))/(image.getHeight());
-				float redColor = image.getBand(0).pixels[weightedY][x];
-		        float greenColor = image.getBand(1).pixels[weightedY][x];
-		        float blueColor = image.getBand(2).pixels[weightedY][x];
-		        float sumFloat = (((redColor*256) + (greenColor*256) + (blueColor*256)) / 3);
-		        average += sumFloat;
-		        denominator++;
-			}
-			if (add) {
-				add = false;
-			} else {
-				add = true;
-			}
-			string.append(Integer.toString((int)(average/denominator)));
-		}
-		return string;
-		
-	}
-	*/
-	
 	public StringBuilder findAveragesFromMiddle(MBFImage image) {
 		StringBuilder string = new StringBuilder();
 		int counter = 0;
